@@ -1,0 +1,59 @@
+{% extends 'courseinfo/base.html' %}
+
+{% block title %}
+    Student - {{ student }}
+{% endblock %}
+
+{% block content %}
+    <h2>{{ student }}</h2>
+    <ul>
+        <li>
+            <a href="{{ student.get_update_url }}"
+                class="button">
+                Edit Student
+            </a>
+        </li>
+        <li>
+            <a href="{{ student.get_delete_url }}"
+                class="button">
+                Delete Student
+            </a>
+        </li>
+    </ul>
+
+    <section>
+        <table>
+            <tr>
+                <th>Student id:</th>
+                <td><a href="{{student.get_absolute_url }}">{{ student.student_id }}</a></td>
+            </tr>
+            <tr>
+                <th>First Name:</th>
+                <td>{{ student.first_name }}</td>
+            </tr>
+            <tr>
+                <th>Last Name:</th>
+                <td><a href="{{student.get_absolute_url }}">{{ student.last_name }}</a></td>
+            </tr>
+
+            <tr>
+                <th>Nickname:</th>
+                <td><a href="{{student.get_absolute_url }}">{{ student.nickname }}</a></td>
+            </tr>
+        </table>
+
+    </section>
+
+    <section>
+        <h3>Registrations</h3>
+        <ul>
+            {% for registration in registration_list %}
+                <li>
+                    <a href="{{registration.get_absolute_url }}">{{ registration.section }}</a>
+                </li>
+            {% empty %}
+                <li><em>This student didn't register any sections.</em></li>
+            {% endfor %}
+        </ul>
+    </section>
+{% endblock %}

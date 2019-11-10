@@ -1,0 +1,38 @@
+{% extends 'courseinfo/base.html' %}
+
+{% block title %}
+    Registration - {{ registration }}
+{% endblock %}
+
+{% block content %}
+    <h2>{{ registration }}</h2>
+    <ul>
+        <li>
+            <a href="{{ registration.get_update_url }}">
+                Edit Registration
+            </a>
+        </li>
+        <li>
+            <a href="{{ registration.get_delete_url }}">
+                Delete Registration
+            </a>
+        </li>
+    </ul>
+
+    <section>
+        <table>
+            <tr>
+                <th>Registration id:</th>
+                <td><a href="{{registration.get_absolute_url }}">{{ registration.registration_id }}</a></td>
+            </tr>
+            <tr>
+                <th>Student:</th>
+                <td>{{ student }}</td>
+            </tr>
+            <tr>
+                <th>Section:</th>
+                <td><a href="{{section.get_absolute_url }}">{{ section }}</a></td>
+            </tr>
+        </table>
+    </section>
+{% endblock %}
