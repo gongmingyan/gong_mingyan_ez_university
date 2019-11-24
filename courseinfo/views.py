@@ -1,4 +1,4 @@
-from django.core.paginator import PageNotAnInteger, EmptyPage, Paginator
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.shortcuts import render, get_object_or_404, render_to_response, redirect
 from django.urls import reverse_lazy
 from django.views import View
@@ -15,11 +15,13 @@ from .models import (
     Registration,
 )
 
-class InstructorList(PageLinksMixin, ListView):
+class InstructorList(LoginRequiredMixin, PermissionRequiredMixin, PageLinksMixin, ListView):
     paginate_by = 25
     model = Instructor
+    permission_required = 'courseinfo.view_instructor'
 
-class InstructorDetail(View):
+class InstructorDetail(LoginRequiredMixin, PermissionRequiredMixin, View):
+    permission_required = 'courseinfo.view_instructor'
 
     def get(self, request, pk):
         instructor = get_object_or_404(
@@ -33,16 +35,19 @@ class InstructorDetail(View):
             {'instructor': instructor, 'section_list': section_list}
         )
 
-class InstructorCreate(CreateView):
+class InstructorCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     form_class = InstructorForm
     model = Instructor
+    permission_required = 'courseinfo.add_instructor'
 
-class InstructorUpdate(UpdateView):
+class InstructorUpdate(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     form_class = InstructorForm
     model = Instructor
     template_name = 'courseinfo/instructor_form_update.html'
+    permission_required = 'courseinfo.change_instructor'
 
-class InstructorDelete(View):
+class InstructorDelete(LoginRequiredMixin, PermissionRequiredMixin, View):
+    permission_required = 'courseinfo.delete_instructor'
 
     def get(self, request, pk):
         instructor = self.get_object(pk)
@@ -73,11 +78,13 @@ class InstructorDelete(View):
         instructor.delete()
         return redirect('courseinfo_instructor_list_urlpattern')
 
-class SectionList(ListView):
+class SectionList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     model = Section
+    permission_required = 'courseinfo.view_section'
 
 
-class SectionDetail(View):
+class SectionDetail(LoginRequiredMixin, PermissionRequiredMixin, View):
+    permission_required = 'courseinfo.view_section'
 
     def get(self, request, pk):
         section = get_object_or_404(
@@ -98,16 +105,19 @@ class SectionDetail(View):
              'registration_list': registration_list}
         )
 
-class SectionCreate(CreateView):
+class SectionCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     form_class = SectionForm
     model = Section
+    permission_required = 'courseinfo.add_section'
 
-class SectionUpdate(UpdateView):
+class SectionUpdate(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     form_class = SectionForm
     model = Section
     template_name = 'courseinfo/section_form_update.html'
+    permission_required = 'courseinfo.change_section'
 
-class SectionDelete(View):
+class SectionDelete(LoginRequiredMixin, PermissionRequiredMixin, View):
+    permission_required = 'courseinfo.delete_section'
 
     def get(self, request, pk):
         section = self.get_object(pk)
@@ -135,11 +145,13 @@ class SectionDelete(View):
         return redirect('courseinfo_section_list_urlpattern')
 
 
-class CourseList(ListView):
+class CourseList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     model = Course
+    permission_required = 'courseinfo.view_course'
 
 
-class CourseDetail(View):
+class CourseDetail(LoginRequiredMixin, PermissionRequiredMixin, View):
+    permission_required = 'courseinfo.view_course'
 
     def get(self, request, pk):
         course = get_object_or_404(
@@ -153,16 +165,19 @@ class CourseDetail(View):
             {'course': course, 'section_list': section_list}
         )
 
-class CourseCreate(CreateView):
+class CourseCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     form_class = CourseForm
     model = Course
+    permission_required = 'courseinfo.add_course'
 
-class CourseUpdate(UpdateView):
+class CourseUpdate(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     form_class = CourseForm
     model = Course
     template_name = 'courseinfo/course_form_update.html'
+    permission_required = 'courseinfo.change_course'
 
-class CourseDelete(View):
+class CourseDelete(LoginRequiredMixin, PermissionRequiredMixin, View):
+    permission_required = 'courseinfo.delete_course'
 
     def get(self, request, pk):
         course = self.get_object(pk)
@@ -190,11 +205,13 @@ class CourseDelete(View):
         return redirect('courseinfo_course_list_urlpattern')
 
 
-class SemesterList(ListView):
+class SemesterList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     model = Semester
+    permission_required = 'courseinfo.view_semester'
 
 
-class SemesterDetail(View):
+class SemesterDetail(LoginRequiredMixin, PermissionRequiredMixin, View):
+    permission_required = 'courseinfo.view_semester'
 
     def get(self, request, pk):
         semester = get_object_or_404(
@@ -208,16 +225,19 @@ class SemesterDetail(View):
             {'semester': semester, 'section_list': section_list}
         )
 
-class SemesterCreate(CreateView):
+class SemesterCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     form_class = SemesterForm
     model = Semester
+    permission_required = 'courseinfo.add_semester'
 
-class SemesterUpdate(UpdateView):
+class SemesterUpdate(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     form_class = SemesterForm
     model = Semester
     template_name = 'courseinfo/semester_form_update.html'
+    permission_required = 'courseinfo.change_semester'
 
-class SemesterDelete(View):
+class SemesterDelete(LoginRequiredMixin, PermissionRequiredMixin, View):
+    permission_required = 'courseinfo.delete_semester'
 
     def get(self, request, pk):
         semester = self.get_object(pk)
@@ -244,12 +264,14 @@ class SemesterDelete(View):
         semester.delete()
         return redirect('courseinfo_semester_list_urlpattern')
 
-class StudentList(PageLinksMixin, ListView):
+class StudentList(LoginRequiredMixin, PermissionRequiredMixin, PageLinksMixin, ListView):
     paginate_by = 25
     model = Student
+    permission_required = 'courseinfo.view_student'
 
 
-class StudentDetail(View):
+class StudentDetail(LoginRequiredMixin, PermissionRequiredMixin, View):
+    permission_required = 'courseinfo.view_student'
 
     def get(self, request, pk):
         student = get_object_or_404(
@@ -264,16 +286,19 @@ class StudentDetail(View):
              'registration_list': registration_list}
         )
 
-class StudentCreate(CreateView):
+class StudentCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     form_class = StudentForm
     model = Student
+    permission_required = 'courseinfo.add_student'
 
-class StudentUpdate(UpdateView):
+class StudentUpdate(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     form_class = StudentForm
     model = Student
     template_name = 'courseinfo/student_form_update.html'
+    permission_required = 'courseinfo.change_student'
 
-class StudentDelete(View):
+class StudentDelete(LoginRequiredMixin, PermissionRequiredMixin, View):
+    permission_required = 'courseinfo.delete_student'
 
     def get(self, request, pk):
         student = self.get_object(pk)
@@ -301,10 +326,12 @@ class StudentDelete(View):
         return redirect('courseinfo_student_list_urlpattern')
 
 
-class RegistrationList(ListView):
+class RegistrationList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     model = Registration
+    permission_required = 'courseinfo.view_registration'
 
-class RegistrationDetail(View):
+class RegistrationDetail(LoginRequiredMixin, PermissionRequiredMixin, View):
+    permission_required = 'courseinfo.view_registration'
 
     def get(self, request, pk):
         registration = get_object_or_404(
@@ -321,14 +348,16 @@ class RegistrationDetail(View):
              'section': section,}
         )
 
-class RegistrationCreate(CreateView):
+class RegistrationCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     form_class = RegistrationForm
     model = Registration
+    permission_required = 'courseinfo.add_registration'
 
-class RegistrationUpdate(View):
+class RegistrationUpdate(LoginRequiredMixin, PermissionRequiredMixin, View):
     form_class = RegistrationForm
     model = Registration
     template_name = 'courseinfo/registration_form_update.html'
+    permission_required = 'courseinfo.change_registration'
 
     def get_object(self, pk):
         return get_object_or_404(
@@ -367,6 +396,7 @@ class RegistrationUpdate(View):
                 context
             )
 
-class RegistrationDelete(DeleteView):
+class RegistrationDelete(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     model = Registration
     success_url = reverse_lazy('courseinfo_registration_list_urlpattern')
+    permission_required = 'courseinfo.delete_registration'
